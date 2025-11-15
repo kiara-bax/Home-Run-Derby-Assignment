@@ -39,7 +39,8 @@ World.create(document.getElementById('scene-container'), {
 
   const { camera } = world;
 
-  
+  world.registerSystem(PhysicsSystem).registerComponent(PhysicsBody).registerComponent(PhysicsShape);
+
   // homerun message
   const canvas = document.createElement('canvas');
   canvas.width = 2048;
@@ -86,17 +87,14 @@ World.create(document.getElementById('scene-container'), {
   let homeRun = false;
 
   // create a floor
-  const floorMesh = new Mesh(
-    new PlaneGeometry(20, 20), new MeshStandardMaterial({color:"tan"}));
+  const floorGeometry = new PlaneGeometry(200, 200);
+  const floorMaterial = new MeshStandardMaterial({color: "green"});
+  const floorMesh = new Mesh(floorGeometry, floorMaterial);
   floorMesh.rotation.x = -Math.PI / 2;
-
   const floorEntity = world.createTransformEntity(floorMesh);
-  floorEntity.addComponent(PhysicsShape, {
-      shape: PhysicsShapeType.Box,
-      dimensions: [20, 0.1, 20],  // width, height, depth
-      density: 0
-    }).addComponent(PhysicsBody, { state: PhysicsState.Static});
-
+  
+  floorEntity.addComponent(LocomotionEnvironment, {type: EnvironmentType.STATIC});
+  
   // Create a green sphere
   const sphereGeometry = new SphereGeometry(0.25, 32, 32);
   const greenMaterial = new MeshStandardMaterial({ color: "red" });
@@ -164,8 +162,7 @@ World.create(document.getElementById('scene-container'), {
   console.log(floorMesh.position);
   console.log(wallMesh.position);
 
-  world.registerSystem(PhysicsSystem).registerComponent(PhysicsBody).registerComponent(PhysicsShape);
-
+  
 
   // vvvvvvvv EVERYTHING BELOW WAS ADDED TO DISPLAY A BUTTON TO ENTER VR FOR QUEST 1 DEVICES vvvvvv
   //          (for some reason IWSDK doesn't show Enter VR button on Quest 1)
