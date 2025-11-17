@@ -88,25 +88,21 @@ World.create(document.getElementById('scene-container'), {
   updateScoreboard();
 
   // create a floor
-  const floorGeometry = new PlaneGeometry(200, 200);
-  const floorMaterial = new MeshStandardMaterial({color: "green"});
-  const floorMesh = new Mesh(floorGeometry, floorMaterial);
-  floorMesh.rotation.x = -Math.PI / 2;
-  floorMesh.position.y = 0;
+  const floorMesh = new Mesh(
+    new PlaneGeometry(200, 200),
+    new MeshStandardMaterial({color: 'green', side: DoubleSide})
+  );
+  //floorMesh.rotation.x = -Math.PI / 2;
+  floorMesh.position.y = -1;
 
-  const floorEntity = world.createTransformEntity(floorMesh);
-
-  floorEntity.addComponent(PhysicsShape, {
-    shape: PhysicsShapeType.Box(thin),
-    dimensions: [200, 1,  200],
-    density: 0.2,
+  const floorEntity = world.createTransformEntity(floorMesh).addComponent(PhysicsShape, {
+    shape: PhysicsShapeType.Box,
+    dimensions: [200, 0.1,  200],
+    density: 0,
     friction: 0.5,
-    restitution: 0.9,
+    restitution: 0.1,
   });
   floorEntity.addComponent(PhysicsBody, { state: PhysicsState.Static});
-  floorEntity.addComponent(LocomotionEnvironment, {type: EnvironmentType.STATIC});
-
-
 
   // Create a green sphere
   const sphereGeometry = new SphereGeometry(0.25, 32, 32);
@@ -146,16 +142,17 @@ World.create(document.getElementById('scene-container'), {
 
   // create a wall
   const wallMesh = new Mesh(
-    new PlaneGeometry(20, 20),
-    new MeshStandardMaterial({color: "grey"}));
+    new PlaneGeometry(200, 20),
+    new MeshStandardMaterial({color: "grey", side: DoubleSide})
+  );
   
-  wallMesh.position.set(0, 1, -10);
+  wallMesh.position.set(0, 1, -100);
   wallMesh.rotation.y = Math.PI;
 
   const wallEntity = world.createTransformEntity(wallMesh)
     .addComponent(PhysicsShape, {
       shape: PhysicsShapeType.Box,
-      dimensions: [20, 20, 0.1], 
+      dimensions: [200, 20, 0.1], 
       density: 0,}).addComponent(PhysicsBody, { 
         state: PhysicsState.Static });
     
@@ -170,7 +167,7 @@ World.create(document.getElementById('scene-container'), {
       p.z = p.z || 0;
     }
 
-    const wallZ = -10;
+    const wallZ = -100;
     if (!homeRun && p.z < wallZ) {
       homeRun = true;
       updateScoreboard("HOME RUN!");
