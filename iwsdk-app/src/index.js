@@ -8,6 +8,7 @@ import {
   PhysicsBody, PhysicsShape, 
   PhysicsShapeType, PhysicsState, 
   PhysicsSystem, CylinderGeometry,
+  DistanceGrabbable, MovementMode,
 } from '@iwsdk/core';
 
 import { PanelSystem } from './panel.js'; // system for displaying "Enter VR" panel on Quest 1
@@ -103,7 +104,8 @@ World.create(document.getElementById('scene-container'), {
   
   const sphereEntity = world.createTransformEntity(sphereMesh);
   sphereEntity.addComponent(Interactable);
-  sphereEntity.addComponent(OneHandGrabbable);
+  sphereEntity.addComponent(DistanceGrabbable, {
+    MovementMode: MovementMode.MoveTowardsTarget});
   sphereEntity.addComponent(PhysicsShape, {
       shape: PhysicsShapeType.Sphere,
       dimensions: [0.25],
@@ -121,13 +123,15 @@ World.create(document.getElementById('scene-container'), {
 
   batMesh.position.set(-0.5, 1.3, -2);
   const batEntity = world.createTransformEntity(batMesh)
-  batEntity.addComponent(Interactable).addComponent(OneHandGrabbable);
+  batEntity.addComponent(Interactable);
+  batEntity.addComponent(DistanceGrabbable, {
+    MovementMode: MovementMode.MoveTowardsTarget});
   batEntity.addComponent(PhysicsShape, {
       shape: PhysicsShapeType.Cylinder,
       dimensions: [0.05, 1], // radius, height
       density: 0.5,
       restitution: 0.1,});
-  batEntity.addComponent(PhysicsBody, {state: PhysicsState.Dynamic});
+  batEntity.addComponent(PhysicsBody, {state: PhysicsState.Kinematic});
 
   // create a wall
   const wallMesh = new Mesh(
