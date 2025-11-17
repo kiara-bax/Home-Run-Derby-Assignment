@@ -88,24 +88,13 @@ World.create(document.getElementById('scene-container'), {
   updateScoreboard();
 
   // create a floor
-  const floorMesh = new Mesh(
-    new PlaneGeometry(200, 200),
-    new MeshStandardMaterial({color: 'green', side: DoubleSide})
-  );
-  
+  const floorMesh = new Mesh(new PlaneGeometry(200, 200), new MeshStandardMaterial({color: 'green', side: DoubleSide}));
   floorMesh.rotation.x = -Math.PI / 2;
-  floorMesh.position.y = 0;
-
   const floorEntity = world.createTransformEntity(floorMesh);
-  floorEntity.addComponent(PhysicsShape, {
-    shape: PhysicsShapeType.Box,
-    dimensions: [200, 0.1,  200],
-    density: 0,
-    friction: 0.5,
-    restitution: 0.1,
-  });
+  floorEntity.addComponent(LocomotionEnvironment, {type: EnvironmentType.STATIC})
   floorEntity.addComponent(PhysicsBody, { state: PhysicsState.Static});
-
+  floorEntity.addComponent(PhysicsShape, {shape: PhysicsShapeType.Auto, restitution: 0.9,});
+  
   // Create a green sphere
   const sphereGeometry = new SphereGeometry(0.25, 32, 32);
   const sphereMaterial = new MeshStandardMaterial({ color: "red" });
