@@ -101,17 +101,16 @@ World.create(document.getElementById('scene-container'), {
   const sphereMesh = new Mesh(sphereGeometry, sphereMaterial);
   sphereMesh.position.set(1, 1.5, -3);
   
-  const sphereEntity = world.createTransformEntity(sphereMesh)
-    .addComponent(Interactable)
-    .addComponent(OneHandGrabbable)
-    .addComponent(PhysicsShape, {
+  const sphereEntity = world.createTransformEntity(sphereMesh);
+  sphereEntity.addComponent(Interactable);
+  sphereEntity.addComponent(OneHandGrabbable);
+  sphereEntity.addComponent(PhysicsShape, {
       shape: PhysicsShapeType.Sphere,
       dimensions: [0.25],
       density: 0.2,
       friction: 0.5,
-      restitution: 0.9,
-    })
-    .addComponent(PhysicsBody, {state: PhysicsState.Dynamic});
+      restitution: 0.9,});
+  sphereEntity.addComponent(PhysicsBody, {state: PhysicsState.Dynamic});
 
   
   // create a bat
@@ -122,14 +121,13 @@ World.create(document.getElementById('scene-container'), {
 
   batMesh.position.set(-0.5, 1.3, -2);
   const batEntity = world.createTransformEntity(batMesh)
-    .addComponent(Interactable).addComponent(OneHandGrabbable)
-    .addComponent(PhysicsShape, {
+  batEntity.addComponent(Interactable).addComponent(OneHandGrabbable);
+  batEntity.addComponent(PhysicsShape, {
       shape: PhysicsShapeType.Cylinder,
       dimensions: [0.05, 1], // radius, height
       density: 0.5,
-      restitution: 0.1,
-    })
-    .addComponent(PhysicsBody, {state: PhysicsState.Dynamic});
+      restitution: 0.1,});
+  batEntity.addComponent(PhysicsBody, {state: PhysicsState.Dynamic});
 
   // create a wall
   const wallMesh = new Mesh(
@@ -137,15 +135,15 @@ World.create(document.getElementById('scene-container'), {
     new MeshStandardMaterial({color: "grey", side: DoubleSide})
   );
   
-  wallMesh.position.set(0, 1, -100);
+  wallMesh.position.set(0, 1, -50);
   wallMesh.rotation.y = Math.PI;
 
-  const wallEntity = world.createTransformEntity(wallMesh)
-    .addComponent(PhysicsShape, {
+  const wallEntity = world.createTransformEntity(wallMesh);
+  wallEntity.addComponent(PhysicsShape, {
       shape: PhysicsShapeType.Box,
       dimensions: [200, 20, 0.1], 
-      density: 0,}).addComponent(PhysicsBody, { 
-        state: PhysicsState.Static });
+      density: 0,});
+  wallEntity.addComponent(PhysicsBody, { state: PhysicsState.Static });
     
   let homeRun = false;
     
@@ -158,8 +156,9 @@ World.create(document.getElementById('scene-container'), {
       p.z = p.z || 0;
     }
 
-    const wallZ = -100;
-    if (!homeRun && p.z < wallZ) {
+    const wallZ = -50;
+    const wallY = 20;
+    if (!homeRun && p.z > wallZ && p.y > wallY ) {
       homeRun = true;
       updateScoreboard("HOME RUN!");
     }  
