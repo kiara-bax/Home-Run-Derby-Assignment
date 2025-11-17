@@ -92,10 +92,12 @@ World.create(document.getElementById('scene-container'), {
     new PlaneGeometry(200, 200),
     new MeshStandardMaterial({color: 'green', side: DoubleSide})
   );
-  //floorMesh.rotation.x = -Math.PI / 2;
-  floorMesh.position.y = -1;
+  
+  floorMesh.rotation.x = -Math.PI / 2;
+  floorMesh.position.y = 0;
 
-  const floorEntity = world.createTransformEntity(floorMesh).addComponent(PhysicsShape, {
+  const floorEntity = world.createTransformEntity(floorMesh);
+  floorEntity.addComponent(PhysicsShape, {
     shape: PhysicsShapeType.Box,
     dimensions: [200, 0.1,  200],
     density: 0,
